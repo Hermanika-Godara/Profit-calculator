@@ -9,11 +9,19 @@
       font-family: Arial, sans-serif;
       background-color: #f9f9f9;
       padding: 20px;
-      max-width: 600px;
+      max-width: 700px;
       margin: auto;
+      position: relative;
     }
     h1 {
       text-align: center;
+      color: #333;
+    }
+    #clientInfo {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      text-align: right;
       color: #333;
     }
     .input-group {
@@ -24,7 +32,7 @@
       margin-bottom: 5px;
       color: #555;
     }
-    input[type="number"] {
+    input[type="number"], input[type="text"] {
       width: 100%;
       padding: 8px;
       margin-bottom: 5px;
@@ -49,6 +57,11 @@
   </style>
 </head>
 <body>
+  <div id="clientInfo">
+    <label for="clientName">Client/Company Name</label>
+    <input type="text" id="clientName" placeholder="Enter Client/Company Name">
+  </div>
+
   <h1>Profit Calculator</h1>
 
   <div class="input-group">
@@ -89,6 +102,8 @@
 
   <script>
     function calculateProfit() {
+      let clientName = document.getElementById('clientName').value;
+
       let totalCost = 0;
       totalCost += Number(document.getElementById('engineerInspection').value || 0);
       totalCost += Number(document.getElementById('purchasePrice').value || 0);
@@ -104,6 +119,7 @@
       let profit = sellingPrice - totalCost;
 
       document.getElementById('result').innerHTML = `
+        <strong>Client:</strong> ${clientName || 'N/A'}<br>
         <strong>Total Cost:</strong> ₹ ${totalCost.toFixed(2)} <br>
         <strong>Profit:</strong> ₹ ${profit.toFixed(2)}
       `;
