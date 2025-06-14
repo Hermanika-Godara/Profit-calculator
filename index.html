@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profit Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .input-group {
+      margin-bottom: 10px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #555;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 5px;
+      box-sizing: border-box;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 10px;
+    }
+    .result {
+      margin-top: 15px;
+      background: #fff;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Profit Calculator</h1>
+
+  <div class="input-group">
+    <label>Engineer Inspection</label>
+    <input type="number" id="engineerInspection" placeholder="₹">
+
+    <label>Purchase Price</label>
+    <input type="number" id="purchasePrice" placeholder="₹">
+
+    <label>Customer Inspection Cost 1</label>
+    <input type="number" id="custInspection1" placeholder="₹">
+
+    <label>Customer Inspection Cost 2</label>
+    <input type="number" id="custInspection2" placeholder="₹">
+
+    <label>Dismantling Cost</label>
+    <input type="number" id="dismantling" placeholder="₹">
+
+    <label>Packing Cost</label>
+    <input type="number" id="packing" placeholder="₹">
+
+    <label>Loading Cost</label>
+    <input type="number" id="loading" placeholder="₹">
+
+    <label>Transport Cost</label>
+    <input type="number" id="transport" placeholder="₹">
+
+    <label>Other Costs</label>
+    <input type="number" id="other" placeholder="₹">
+
+    <label>Selling Price</label>
+    <input type="number" id="sellingPrice" placeholder="₹">
+
+    <button onclick="calculateProfit()">Calculate Profit</button>
+  </div>
+
+  <div class="result" id="result"></div>
+
+  <script>
+    function calculateProfit() {
+      let totalCost = 0;
+      totalCost += Number(document.getElementById('engineerInspection').value || 0);
+      totalCost += Number(document.getElementById('purchasePrice').value || 0);
+      totalCost += Number(document.getElementById('custInspection1').value || 0);
+      totalCost += Number(document.getElementById('custInspection2').value || 0);
+      totalCost += Number(document.getElementById('dismantling').value || 0);
+      totalCost += Number(document.getElementById('packing').value || 0);
+      totalCost += Number(document.getElementById('loading').value || 0);
+      totalCost += Number(document.getElementById('transport').value || 0);
+      totalCost += Number(document.getElementById('other').value || 0);
+
+      let sellingPrice = Number(document.getElementById('sellingPrice').value || 0);
+      let profit = sellingPrice - totalCost;
+
+      document.getElementById('result').innerHTML = `
+        <strong>Total Cost:</strong> ₹ ${totalCost.toFixed(2)} <br>
+        <strong>Profit:</strong> ₹ ${profit.toFixed(2)}
+      `;
+    }
+  </script>
+</body>
+</html>
