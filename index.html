@@ -172,7 +172,7 @@
     }
 
     async function downloadPDF() {
-      const {{ jsPDF }} = window.jspdf;
+      const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
       const currency = document.getElementById("currency").value;
       const clientName = document.getElementById("clientName").value || "N/A";
