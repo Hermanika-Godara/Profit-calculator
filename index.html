@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title> PRINTOCARE Profit Calculator </title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Profit Calculator for PRINTOCARE</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -16,27 +16,23 @@
     h1 {
       text-align: center;
       color: #333;
+      margin-bottom: 5px;
     }
-    #clientInfo {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      text-align: right;
-      color: #333;
-    }
-    .input-group {
-      margin-bottom: 10px;
+    p#clientSection {
+      text-align: center;
+      margin-bottom: 20px;
     }
     label {
       display: block;
       margin-bottom: 5px;
       color: #555;
     }
-    input[type="number"], input[type="text"] {
+    input[type="number"], input[type="text"], select {
       width: 100%;
       padding: 8px;
-      margin-bottom: 5px;
+      margin-bottom: 10px;
       box-sizing: border-box;
+      font-size: 16px;
     }
     button {
       padding: 10px 20px;
@@ -46,6 +42,7 @@
       cursor: pointer;
       width: 100%;
       margin-top: 10px;
+      font-size: 16px;
     }
     .result {
       margin-top: 15px;
@@ -53,82 +50,145 @@
       padding: 10px;
       border: 1px solid #ddd;
       border-radius: 4px;
+      font-size: 16px;
     }
   </style>
 </head>
 <body>
 
+  <h1>Profit Calculator for PRINTOCARE</h1>
 
-<p>
-  <label for="clientName">Client/Company Name</label><br>
-  <input type="text" id="clientName" placeholder="Enter Client/Company Name">
-  <label for="InvoiceNumber">Invoice Number</label><br>
-  <input type="number" id="InvoiceNumber" placeholder="Enter Invoice Number">
-</p>
+  <p id="clientSection">
+    <label for="clientName">Client/Company Name</label>
+    <input type="text" id="clientName" placeholder="Enter Client/Company Name" />
+
+    <label for="currency">Select Currency</label>
+    <select id="currency" onchange="updateCurrencySymbols()">
+      <option value="₹">INR (₹)</option>
+      <option value="S$">SGD (S$)</option>
+      <option value="€">EUR (€)</option>
+      <option value="$">USD ($)</option>
+    </select>
+  </p>
 
   <div class="input-group">
     <label>Engineer Inspection</label>
-    <input type="number" id="engineerInspection" placeholder="₹">
+    <input type="number" id="engineerInspection" placeholder="0" />
 
     <label>Purchase Price</label>
-    <input type="number" id="purchasePrice" placeholder="₹">
+    <input type="number" id="purchasePrice" placeholder="0" />
 
     <label>Customer Inspection Cost 1</label>
-    <input type="number" id="custInspection1" placeholder="₹">
+    <input type="number" id="custInspection1" placeholder="0" />
 
     <label>Customer Inspection Cost 2</label>
-    <input type="number" id="custInspection2" placeholder="₹">
+    <input type="number" id="custInspection2" placeholder="0" />
 
     <label>Dismantling Cost</label>
-    <input type="number" id="dismantling" placeholder="₹">
+    <input type="number" id="dismantling" placeholder="0" />
 
     <label>Packing Cost</label>
-    <input type="number" id="packing" placeholder="₹">
+    <input type="number" id="packing" placeholder="0" />
 
     <label>Loading Cost</label>
-    <input type="number" id="loading" placeholder="₹">
+    <input type="number" id="loading" placeholder="0" />
 
     <label>Transport Cost</label>
-    <input type="number" id="transport" placeholder="₹">
+    <input type="number" id="transport" placeholder="0" />
 
     <label>Other Costs</label>
-    <input type="number" id="other" placeholder="₹">
+    <input type="number" id="other" placeholder="0" />
 
     <label>Selling Price</label>
-    <input type="number" id="sellingPrice" placeholder="₹">
+    <input type="number" id="sellingPrice" placeholder="0" />
 
-    <label>commission</label>
-    <input type="number" id="commission" placeholder="₹">
+    <label>Commission</label>
+    <input type="number" id="commission" placeholder="0" />
 
     <button onclick="calculateProfit()">Calculate Profit</button>
+    <button onclick="downloadPDF()" style="background-color:#28a745; margin-top: 8px;">Download PDF</button>
   </div>
 
   <div class="result" id="result"></div>
 
+  <!-- jsPDF CDN for PDF export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
   <script>
+    // Update input placeholders with selected currency symbol
+    function updateCurrencySymbols() {
+      const currency = document.getElementById('currency').value;
+      const inputs = [
+        'engineerInspection', 'purchasePrice', 'custInspection1', 'custInspection2',
+        'dismantling', 'packing', 'loading', 'transport', 'other', 'sellingPrice', 'commission'
+      ];
+      inputs.forEach(id => {
+        const input = document.getElementById(id);
+        input.placeholder = currency + " 0";
+      });
+      // Also update result if visible
+      if(document.getElementById('result').innerHTML.trim() !== '') {
+        calculateProfit();
+      }
+    }
+
     function calculateProfit() {
-      let clientName = document.getElementById('clientName').value;
+      const currency = document.getElementById('currency').value;
+      const clientName = document.getElementById('clientName').value || 'N/A';
 
       let totalCost = 0;
-      totalCost += Number(document.getElementById('engineerInspection').value || 0);
-      totalCost += Number(document.getElementById('purchasePrice').value || 0);
-      totalCost += Number(document.getElementById('custInspection1').value || 0);
-      totalCost += Number(document.getElementById('custInspection2').value || 0);
-      totalCost += Number(document.getElementById('dismantling').value || 0);
-      totalCost += Number(document.getElementById('packing').value || 0);
-      totalCost += Number(document.getElementById('loading').value || 0);
-      totalCost += Number(document.getElementById('transport').value || 0);
-      totalCost += Number(document.getElementById('other').value || 0);
+      ['engineerInspection', 'purchasePrice', 'custInspection1', 'custInspection2',
+       'dismantling', 'packing', 'loading', 'transport', 'other'].forEach(id => {
+        totalCost += Number(document.getElementById(id).value || 0);
+      });
 
-      let sellingPrice = Number(document.getElementById('sellingPrice').value || 0);
-      let profit = sellingPrice - totalCost;
+      const sellingPrice = Number(document.getElementById('sellingPrice').value || 0);
+      const commission = Number(document.getElementById('commission').value || 0);
+
+      let profit = sellingPrice - totalCost - commission;
 
       document.getElementById('result').innerHTML = `
-        <strong>Client:</strong> ${clientName || 'N/A'}<br>
-        <strong>Total Cost:</strong> ₹ ${totalCost.toFixed(2)} <br>
-        <strong>Profit:</strong> ₹ ${profit.toFixed(2)}
+        <strong>Client:</strong> ${clientName}<br>
+        <strong>Total Cost:</strong> ${currency} ${totalCost.toFixed(2)}<br>
+        <strong>Commission:</strong> ${currency} ${commission.toFixed(2)}<br>
+        <strong>Profit:</strong> ${currency} ${profit.toFixed(2)}
       `;
     }
+
+    async function downloadPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const clientName = document.getElementById('clientName').value || 'N/A';
+      const currency = document.getElementById('currency').value;
+
+      let totalCost = 0;
+      ['engineerInspection', 'purchasePrice', 'custInspection1', 'custInspection2',
+       'dismantling', 'packing', 'loading', 'transport', 'other'].forEach(id => {
+        totalCost += Number(document.getElementById(id).value || 0);
+      });
+
+      const sellingPrice = Number(document.getElementById('sellingPrice').value || 0);
+      const commission = Number(document.getElementById('commission').value || 0);
+      let profit = sellingPrice - totalCost - commission;
+
+      doc.setFontSize(18);
+      doc.text("Profit Calculator for PRINTOCARE", 14, 20);
+
+      doc.setFontSize(14);
+      doc.text(`Client/Company: ${clientName}`, 14, 35);
+      doc.text(`Currency: ${currency}`, 14, 45);
+
+      doc.text(`Total Cost: ${currency} ${totalCost.toFixed(2)}`, 14, 60);
+      doc.text(`Commission: ${currency} ${commission.toFixed(2)}`, 14, 70);
+      doc.text(`Selling Price: ${currency} ${sellingPrice.toFixed(2)}`, 14, 80);
+      doc.text(`Profit: ${currency} ${profit.toFixed(2)}`, 14, 90);
+
+      doc.save(`Profit_Report_${clientName || 'Unknown'}.pdf`);
+    }
+
+    // Initialize currency placeholders on page load
+    window.onload = updateCurrencySymbols;
   </script>
 </body>
 </html>
