@@ -62,7 +62,7 @@
       padding: 12px;
       width: 100%;
       border-radius: 8px;
-      margin-top: 20px;
+      margin-top: 10px;
       font-weight: bold;
       font-size: 1rem;
       cursor: pointer;
@@ -80,7 +80,7 @@
       border-radius: 10px;
       font-weight: 600;
       color: #333;
-      margin-top: 25px;
+      margin-top: 15px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
   </style>
@@ -135,11 +135,13 @@
       <input type="number" id="sellingPrice" placeholder="0">
 
       <button onclick="calculateProfit()">Calculate Profit</button>
+      <button onclick="downloadPDF()">Download PDF</button>
 
       <div class="result" id="result"></div>
     </div>
   </div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script>
     function calculateProfit() {
       const currency = document.getElementById("currency").value;
@@ -167,6 +169,40 @@
         <strong>Selling Price:</strong> ${currency} ${sellingPrice.toFixed(2)}<br>
         <strong>Profit:</strong> ${currency} ${profit.toFixed(2)}
       `;
+    }
+
+    async function downloadPDF() {
+      const {{ jsPDF }} = window.jspdf;
+      const doc = new jsPDF();
+      const currency = document.getElementById("currency").value;
+      const clientName = document.getElementById("clientName").value || "N/A";
+      const invoiceNumber = document.getElementById("InvoiceNumber").value || "N/A";
+
+      let totalCost = 0;
+      totalCost += Number(document.getElementById("engineerInspection").value || 0);
+      totalCost += Number(document.getElementById("purchasePrice").value || 0);
+      totalCost += Number(document.getElementById("custInspection1").value || 0);
+      totalCost += Number(document.getElementById("custInspection2").value || 0);
+      totalCost += Number(document.getElementById("dismantling").value || 0);
+      totalCost += Number(document.getElementById("packing").value || 0);
+      totalCost += Number(document.getElementById("loading").value || 0);
+      totalCost += Number(document.getElementById("transport").value || 0);
+      totalCost += Number(document.getElementById("other").value || 0);
+
+      const sellingPrice = Number(document.getElementById("sellingPrice").value || 0);
+      const profit = sellingPrice - totalCost;
+
+      doc.setFontSize(16);
+      doc.text("PRINTOCARE Profit Calculator", 20, 20);
+
+      doc.setFontSize(12);
+      doc.text(`Client: ${clientName}`, 20, 40);
+      doc.text(`Invoice Number: ${invoiceNumber}`, 20, 50);
+      doc.text(`Total Cost: ${currency} ${totalCost.toFixed(2)}`, 20, 60);
+      doc.text(`Selling Price: ${currency} ${sellingPrice.toFixed(2)}`, 20, 70);
+      doc.text(`Profit: ${currency} ${profit.toFixed(2)}`, 20, 80);
+
+      doc.save("profit_calculator.pdf");
     }
   </script>
 </body>
