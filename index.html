@@ -155,82 +155,93 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script>
-    function calculateProfit() {
-      const currency = document.getElementById("currency").value;
-      const clientName = document.getElementById("clientName").value || "N/A";
-      const invoiceNumber = document.getElementById("InvoiceNumber").value || "N/A";
+  function calculateProfit() {
+    const currency = document.getElementById("currency").value;
+    const clientName = document.getElementById("clientName").value || "N/A";
+    const invoiceNumber = document.getElementById("InvoiceNumber").value || "N/A";
 
-      let totalCost = 0;
-      totalCost += Number(document.getElementById("engineerInspection").value || 0);
-      totalCost += Number(document.getElementById("purchasePrice").value || 0);
-      totalCost += Number(document.getElementById("custInspection1").value || 0);
-      totalCost += Number(document.getElementById("custInspection2").value || 0);
-      totalCost += Number(document.getElementById("dismantling").value || 0);
-      totalCost += Number(document.getElementById("packing").value || 0);
-      totalCost += Number(document.getElementById("loading").value || 0);
-      totalCost += Number(document.getElementById("transport").value || 0);
-      totalCost += Number(document.getElementById("other").value || 0);
+    let totalCost = 0;
+    totalCost += Number(document.getElementById("engineerInspection").value || 0);
+    totalCost += Number(document.getElementById("purchasePrice").value || 0);
+    totalCost += Number(document.getElementById("custInspection1").value || 0);
+    totalCost += Number(document.getElementById("custInspection2").value || 0);
+    totalCost += Number(document.getElementById("dismantling").value || 0);
+    totalCost += Number(document.getElementById("packing").value || 0);
+    totalCost += Number(document.getElementById("loading").value || 0);
+    totalCost += Number(document.getElementById("transport").value || 0);
+    totalCost += Number(document.getElementById("other").value || 0);
 
-      const sellingPrice = Number(document.getElementById("sellingPrice").value || 0);
-      const profit = sellingPrice - totalCost;
+    const sellingPrice = Number(document.getElementById("sellingPrice").value || 0);
+    const profit = sellingPrice - totalCost;
 
-      document.getElementById("result").innerHTML = `
-        <strong>Client:</strong> ${clientName}<br>
-        <strong>Invoice Number:</strong> ${invoiceNumber}<br>
-        <strong>Total Cost:</strong> ${currency} ${totalCost.toFixed(2)}<br>
-        <strong>Selling Price:</strong> ${currency} ${sellingPrice.toFixed(2)}<br>
-        <strong>Profit:</strong> ${currency} ${profit.toFixed(2)}
-      `;
-    }
+    document.getElementById("result").innerHTML = `
+      <strong>Client:</strong> ${clientName}<br>
+      <strong>Invoice Number:</strong> ${invoiceNumber}<br>
+      <strong>Total Cost:</strong> ${currency} ${totalCost.toFixed(2)}<br>
+      <strong>Selling Price:</strong> ${currency} ${sellingPrice.toFixed(2)}<br>
+      <strong>Profit:</strong> ${currency} ${profit.toFixed(2)}
+    `;
+  }
 
-    async function downloadPDF() {
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
-      const currency = document.getElementById("currency").value;
-      const clientName = document.getElementById("clientName").value || "N/A";
-      const invoiceNumber = document.getElementById("InvoiceNumber").value || "N/A";
+  async function downloadPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
 
-      let totalCost = 0;
-      totalCost += Number(document.getElementById("engineerInspection").value || 0);
-      totalCost += Number(document.getElementById("purchasePrice").value || 0);
-      totalCost += Number(document.getElementById("custInspection1").value || 0);
-      totalCost += Number(document.getElementById("custInspection2").value || 0);
-      totalCost += Number(document.getElementById("dismantling").value || 0);
-      totalCost += Number(document.getElementById("packing").value || 0);
-      totalCost += Number(document.getElementById("loading").value || 0);
-      totalCost += Number(document.getElementById("transport").value || 0);
-      totalCost += Number(document.getElementById("other").value || 0);
+    const currency = document.getElementById("currency").value;
+    const clientName = document.getElementById("clientName").value || "N/A";
+    const invoiceNumber = document.getElementById("InvoiceNumber").value || "N/A";
+    const country = document.getElementById("Country").value || "N/A";
+    const state = document.getElementById("State").value || "N/A";
+    const city = document.getElementById("City").value || "N/A";
+    const date = document.getElementById("Date").value || "N/A";
 
-      const sellingPrice = Number(document.getElementById("sellingPrice").value || 0);
-      const profit = sellingPrice - totalCost;
+    const engineerInspection = Number(document.getElementById("engineerInspection").value || 0);
+    const purchasePrice = Number(document.getElementById("purchasePrice").value || 0);
+    const custInspection1 = Number(document.getElementById("custInspection1").value || 0);
+    const custInspection2 = Number(document.getElementById("custInspection2").value || 0);
+    const dismantlingCost = Number(document.getElementById("dismantling").value || 0);
+    const packingCost = Number(document.getElementById("packing").value || 0);
+    const loadingCost = Number(document.getElementById("loading").value || 0);
+    const transportCost = Number(document.getElementById("transport").value || 0);
+    const otherCosts = Number(document.getElementById("other").value || 0);
+    const sellingPrice = Number(document.getElementById("sellingPrice").value || 0);
 
-      doc.setFontSize(16);
-      doc.text("PRINTOCARE Profit Calculator", 20, 20);
+    const totalCost = engineerInspection + purchasePrice + custInspection1 + custInspection2 +
+                      dismantlingCost + packingCost + loadingCost + transportCost + otherCosts;
 
-      doc.setFontSize(12);
-      doc.text(`Client: ${clientName}`, 20, 40);
-      doc.text(`Invoice Number: ${invoiceNumber}`, 20, 50);
-      doc.text(`Country: ${Country}`, 20, 40);
-      doc.text(`City: ${City}`, 20, 40);
-      doc.text(`State: ${State}` , 20, 40);
-      doc.text(`Date: ${Date}`, 20, 40);
-      doc.text(`Currency: ${Currency}`, 20, 40);
-      doc.text(`Engineer Inspection: ${EngineerInspection}`, 20, 40);
-      doc.text(`Purchase Price: ${PurchasePrice}`, 20, 40);
-      doc.text(`Customer Inspection Cost 1: ${CustomerInspectionCost1}` , 20, 40);
-      doc.text(`Customer Inspection Cost 2: ${CustomerInspectionCost2}` , 20, 40);
-      doc.text(`Dismantling Cost: ${DismantlingCost}` , 20, 40);
-      doc.text(`Packing Cost: ${PackingCost}` , 20, 40);
-      doc.text(`Loading Cost: ${LoadingCost}` , 20, 40);
-      doc.text(`Transport Cost: ${TransportCost}` , 20, 40);
-      doc.text(`Other Costs: ${OtherCosts}`, 20, 40);
-    
-      doc.text(`Total Cost: ${currency} ${totalCost.toFixed(2)}`, 20, 60);
-      doc.text(`Selling Price: ${currency} ${sellingPrice.toFixed(2)}`, 20, 70);
-      doc.text(`Profit: ${currency} ${profit.toFixed(2)}`, 20, 80);
+    const profit = sellingPrice - totalCost;
 
-      doc.save("profit_calculator.pdf");
-    }
-  </script>
+    doc.setFontSize(16);
+    doc.text("PRINTOCARE Profit Calculator", 20, 20);
+
+    doc.setFontSize(12);
+    let y = 40; // Starting y position
+
+    doc.text(`Client: ${clientName}`, 20, y); y += 10;
+    doc.text(`Invoice Number: ${invoiceNumber}`, 20, y); y += 10;
+    doc.text(`Country: ${country}`, 20, y); y += 10;
+    doc.text(`State: ${state}`, 20, y); y += 10;
+    doc.text(`City: ${city}`, 20, y); y += 10;
+    doc.text(`Date: ${date}`, 20, y); y += 10;
+    doc.text(`Currency: ${currency}`, 20, y); y += 10;
+
+    doc.text(`Engineer Inspection: ${currency} ${engineerInspection.toFixed(2)}`, 20, y); y += 10;
+    doc.text(`Purchase Price: ${currency} ${purchasePrice.toFixed(2)}`, 20, y); y += 10;
+    doc.text(`Customer Inspection Cost 1: ${currency} ${custInspection1.toFixed(2)}`, 20, y); y += 10;
+    doc.text(`Customer Inspection Cost 2: ${currency} ${custInspection2.toFixed(2)}`, 20, y); y += 10;
+    doc.text(`Dismantling Cost: ${currency} ${dismantlingCost.toFixed(2)}`, 20, y); y += 10;
+    doc.text(`Packing Cost: ${currency} ${packingCost.toFixed(2)}`, 20, y); y += 10;
+    doc.text(`Loading Cost: ${currency} ${loadingCost.toFixed(2)}`, 20, y); y += 10;
+    doc.text(`Transport Cost: ${currency} ${transportCost.toFixed(2)}`, 20, y); y += 10;
+    doc.text(`Other Costs: ${currency} ${otherCosts.toFixed(2)}`, 20, y); y += 10;
+
+    doc.text(`Total Cost: ${currency} ${totalCost.toFixed(2)}`, 20, y); y += 10;
+    doc.text(`Selling Price: ${currency} ${sellingPrice.toFixed(2)}`, 20, y); y += 10;
+    doc.text(`Profit: ${currency} ${profit.toFixed(2)}`, 20, y);
+
+    doc.save("profit_calculator.pdf");
+  }
+</script>
+
 </body>
 </html>
