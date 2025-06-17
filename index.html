@@ -210,6 +210,21 @@
       doc.setFontSize(12);
       doc.text(`Client: ${clientName}`, 20, 40);
       doc.text(`Invoice Number: ${invoiceNumber}`, 20, 50);
+      doc.text(`Country: ${Country}`, 20, 40);
+      doc.text(`City: ${City}`, 20, 40);
+      doc.text(`State: ${State}` , 20, 40);
+      doc.text(`Date: ${Date}`, 20, 40);
+      doc.text(`Currency: ${Currency}`, 20, 40);
+      doc.text(`Engineer Inspection: ${EngineerInspection}`, 20, 40);
+      doc.text(`Purchase Price: ${PurchasePrice}`, 20, 40);
+      doc.text(`Customer Inspection Cost 1: ${CustomerInspectionCost1}` , 20, 40);
+      doc.text(`Customer Inspection Cost 2: ${CustomerInspectionCost2}` , 20, 40);
+      doc.text(`Dismantling Cost: ${DismantlingCost}` , 20, 40);
+      doc.text(`Packing Cost: ${PackingCost}` , 20, 40);
+      doc.text(`Loading Cost: ${LoadingCost}` , 20, 40);
+      doc.text(`Transport Cost: ${TransportCost}` , 20, 40);
+      doc.text(`Other Costs: ${OtherCosts}`, 20, 40);
+    
       doc.text(`Total Cost: ${currency} ${totalCost.toFixed(2)}`, 20, 60);
       doc.text(`Selling Price: ${currency} ${sellingPrice.toFixed(2)}`, 20, 70);
       doc.text(`Profit: ${currency} ${profit.toFixed(2)}`, 20, 80);
