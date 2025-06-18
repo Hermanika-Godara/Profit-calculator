@@ -183,64 +183,90 @@
     `;
   }
 
-  async function downloadPDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
+  
+   
+async function downloadPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
 
-    const currency = document.getElementById("currency").value;
-    const clientName = document.getElementById("clientName").value || "N/A";
-    const invoiceNumber = document.getElementById("InvoiceNumber").value || "N/A";
-    const country = document.getElementById("Country").value || "N/A";
-    const state = document.getElementById("State").value || "N/A";
-    const city = document.getElementById("City").value || "N/A";
-    const date = document.getElementById("Date").value || "N/A";
+  const currency = document.getElementById("currency").value;
+  const clientName = document.getElementById("clientName").value || "N/A";
+  const invoiceNumber = document.getElementById("InvoiceNumber").value || "N/A";
+  const country = document.getElementById("Country").value || "N/A";
+  const state = document.getElementById("State").value || "N/A";
+  const city = document.getElementById("City").value || "N/A";
+  const date = document.getElementById("Date").value || "N/A";
 
-    const engineerInspection = Number(document.getElementById("engineerInspection").value || 0);
-    const purchasePrice = Number(document.getElementById("purchasePrice").value || 0);
-    const custInspection1 = Number(document.getElementById("custInspection1").value || 0);
-    const custInspection2 = Number(document.getElementById("custInspection2").value || 0);
-    const dismantlingCost = Number(document.getElementById("dismantling").value || 0);
-    const packingCost = Number(document.getElementById("packing").value || 0);
-    const loadingCost = Number(document.getElementById("loading").value || 0);
-    const transportCost = Number(document.getElementById("transport").value || 0);
-    const otherCosts = Number(document.getElementById("other").value || 0);
-    const sellingPrice = Number(document.getElementById("sellingPrice").value || 0);
+  const engineerInspection = Number(document.getElementById("engineerInspection").value || 0);
+  const purchasePrice = Number(document.getElementById("purchasePrice").value || 0);
+  const custInspection1 = Number(document.getElementById("custInspection1").value || 0);
+  const custInspection2 = Number(document.getElementById("custInspection2").value || 0);
+  const dismantlingCost = Number(document.getElementById("dismantling").value || 0);
+  const packingCost = Number(document.getElementById("packing").value || 0);
+  const loadingCost = Number(document.getElementById("loading").value || 0);
+  const transportCost = Number(document.getElementById("transport").value || 0);
+  const otherCosts = Number(document.getElementById("other").value || 0);
+  const sellingPrice = Number(document.getElementById("sellingPrice").value || 0);
 
-    const totalCost = engineerInspection + purchasePrice + custInspection1 + custInspection2 +
-                      dismantlingCost + packingCost + loadingCost + transportCost + otherCosts;
+  const totalCost = engineerInspection + purchasePrice + custInspection1 + custInspection2 +
+                    dismantlingCost + packingCost + loadingCost + transportCost + otherCosts;
 
-    const profit = sellingPrice - totalCost;
+  const profit = sellingPrice - totalCost;
 
-    doc.setFontSize(16);
-    doc.text("PRINTOCARE Profit Calculator", 20, 20);
+  doc.setFontSize(18);
+  doc.text("PRINTOCARE Profit Report", 20, 20);
 
-    doc.setFontSize(12);
-    let y = 40; // Starting y position
+  doc.setFontSize(12);
 
-    doc.text(`Client: ${clientName}`, 20, y); y += 10;
-    doc.text(`Invoice Number: ${invoiceNumber}`, 20, y); y += 10;
-    doc.text(`Country: ${country}`, 20, y); y += 10;
-    doc.text(`State: ${state}`, 20, y); y += 10;
-    doc.text(`City: ${city}`, 20, y); y += 10;
-    doc.text(`Date: ${date}`, 20, y); y += 10;
-    doc.text(`Currency: ${currency}`, 20, y); y += 10;
+  const data = [
+    ["Client Name", clientName],
+    ["Invoice Number", invoiceNumber],
+    ["Country", country],
+    ["State", state],
+    ["City", city],
+    ["Date", date],
+    ["Currency", currency],
+    ["Engineer Inspection", `${currency} ${engineerInspection.toFixed(2)}`],
+    ["Purchase Price", `${currency} ${purchasePrice.toFixed(2)}`],
+    ["Customer Inspection Cost 1", `${currency} ${custInspection1.toFixed(2)}`],
+    ["Customer Inspection Cost 2", `${currency} ${custInspection2.toFixed(2)}`],
+    ["Dismantling Cost", `${currency} ${dismantlingCost.toFixed(2)}`],
+    ["Packing Cost", `${currency} ${packingCost.toFixed(2)}`],
+    ["Loading Cost", `${currency} ${loadingCost.toFixed(2)}`],
+    ["Transport Cost", `${currency} ${transportCost.toFixed(2)}`],
+    ["Other Costs", `${currency} ${otherCosts.toFixed(2)}`],
+    ["Total Cost", `${currency} ${totalCost.toFixed(2)}`],
+    ["Selling Price", `${currency} ${sellingPrice.toFixed(2)}`],
+    ["Profit", `${currency} ${profit.toFixed(2)}`],
+  ];
 
-    doc.text(`Engineer Inspection: ${currency} ${engineerInspection.toFixed(2)}`, 20, y); y += 10;
-    doc.text(`Purchase Price: ${currency} ${purchasePrice.toFixed(2)}`, 20, y); y += 10;
-    doc.text(`Customer Inspection Cost 1: ${currency} ${custInspection1.toFixed(2)}`, 20, y); y += 10;
-    doc.text(`Customer Inspection Cost 2: ${currency} ${custInspection2.toFixed(2)}`, 20, y); y += 10;
-    doc.text(`Dismantling Cost: ${currency} ${dismantlingCost.toFixed(2)}`, 20, y); y += 10;
-    doc.text(`Packing Cost: ${currency} ${packingCost.toFixed(2)}`, 20, y); y += 10;
-    doc.text(`Loading Cost: ${currency} ${loadingCost.toFixed(2)}`, 20, y); y += 10;
-    doc.text(`Transport Cost: ${currency} ${transportCost.toFixed(2)}`, 20, y); y += 10;
-    doc.text(`Other Costs: ${currency} ${otherCosts.toFixed(2)}`, 20, y); y += 10;
+  let y = 40;
 
-    doc.text(`Total Cost: ${currency} ${totalCost.toFixed(2)}`, 20, y); y += 10;
-    doc.text(`Selling Price: ${currency} ${sellingPrice.toFixed(2)}`, 20, y); y += 10;
-    doc.text(`Profit: ${currency} ${profit.toFixed(2)}`, 20, y);
+  // Draw table headers
+  doc.setFillColor(0, 102, 204); // Nice blue
+  doc.setTextColor(255, 255, 255);
+  doc.rect(20, y, 170, 10, 'F'); // Filled rectangle for header
+  doc.text("Field", 25, y + 7);
+  doc.text("Value", 105, y + 7);
+  y += 12;
 
-    doc.save("profit_calculator.pdf");
-  }
+  doc.setTextColor(0, 0, 0); // Reset text color to black
+
+  // Draw rows
+  data.forEach(row => {
+    doc.rect(20, y, 170, 10);        // Full row rectangle
+    doc.text(row[0], 25, y + 7);     // Left: Field name
+    doc.text(row[1].toString(), 105, y + 7); // Right: Value
+    y += 12;
+    if (y > 280) {  // If page is full, add a new page
+      doc.addPage();
+      y = 20;
+    }
+  });
+
+  doc.save("profit_report_table.pdf");
+}
+
 </script>
 
 </body>
