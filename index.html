@@ -240,32 +240,43 @@ async function downloadPDF() {
     ["Profit", `${currency} ${profit.toFixed(2)}`],
   ];
 
-  let y = 40;
+  const startX = 20;
+  const startY = 30;
+  const tableWidth = 170;
+  const rowHeight = 10;
+  const col1Width = 80;
+  const col2Width = tableWidth - col1Width;
 
-  // Draw table headers
-  doc.setFillColor(0, 102, 204); // Nice blue
+  let y = startY + 10;
+
+  // Draw Header row with fill
+  doc.setFillColor(0, 102, 204);
   doc.setTextColor(255, 255, 255);
-  doc.rect(20, y, 170, 10, 'F'); // Filled rectangle for header
-  doc.text("Field", 25, y + 7);
-  doc.text("Value", 105, y + 7);
-  y += 12;
+  doc.rect(startX, y, col1Width, rowHeight, 'F');
+  doc.rect(startX + col1Width, y, col2Width, rowHeight, 'F');
+  doc.text("Field", startX + 2, y + 7);
+  doc.text("Value", startX + col1Width + 2, y + 7);
+  y += rowHeight;
 
-  doc.setTextColor(0, 0, 0); // Reset text color to black
+  doc.setTextColor(0, 0, 0);
 
-  // Draw rows
+  // Draw rows with borders
   data.forEach(row => {
-    doc.rect(20, y, 170, 10);        // Full row rectangle
-    doc.text(row[0], 25, y + 7);     // Left: Field name
-    doc.text(row[1].toString(), 105, y + 7); // Right: Value
-    y += 12;
-    if (y > 280) {  // If page is full, add a new page
+    doc.rect(startX, y, col1Width, rowHeight);      // Field Column Box
+    doc.rect(startX + col1Width, y, col2Width, rowHeight);  // Value Column Box
+    doc.text(row[0], startX + 2, y + 7);            // Field Text
+    doc.text(row[1].toString(), startX + col1Width + 2, y + 7); // Value Text
+    y += rowHeight;
+
+    if (y > 280) {
       doc.addPage();
-      y = 20;
+      y = startY;
     }
   });
 
   doc.save("profit_report_table.pdf");
 }
+
 
 </script>
 
