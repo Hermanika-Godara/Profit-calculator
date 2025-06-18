@@ -156,7 +156,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script>
   function calculateProfit() {
-    const currency = document.getElementById("currency").value;
+    const currency = document.getElementById("currency").value || "INR";
     const clientName = document.getElementById("clientName").value || "N/A";
     const invoiceNumber = document.getElementById("InvoiceNumber").value || "N/A";
 
